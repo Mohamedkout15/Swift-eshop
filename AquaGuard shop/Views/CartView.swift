@@ -14,7 +14,7 @@ struct CartView: View {
     var body: some View {
         ScrollView {
             if cartManager.paymentSuccess {
-                Text("Thanks for your purchase! You'll get cozy in our comfy sweaters soon! You'll also receive an email confirmation shortly.")
+                Text("Thanks for your purchase!")
                     .padding()
             } else {
                 if cartManager.products.count > 0 {
@@ -33,24 +33,36 @@ struct CartView: View {
                     PaymentButton(action: cartManager.pay)
                         .padding()
                     
+                    
                 } else {
                     Text("Your cart is empty.")
                 }
             }
         }
+
         .navigationTitle(Text("My Cart"))
         .padding(.top)
         .onDisappear {
             if cartManager.paymentSuccess {
                 cartManager.paymentSuccess = false
+                
             }
+     
         }
+        .background(Image("background_splash_screen")
+                
+                .scaledToFill(
+                )
+                    .edgesIgnoringSafeArea(.all))
     }
 }
 
 struct CartView_Previews: PreviewProvider {
     static var previews: some View {
-        CartView()
-            .environmentObject(CartManager())
+        ZStack(){
+            CartView()
+                .environmentObject(CartManager())
+        }
+
     }
 }

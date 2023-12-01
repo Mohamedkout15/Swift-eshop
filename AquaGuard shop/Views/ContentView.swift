@@ -31,8 +31,16 @@ struct ContentView: View {
                     CartButton(numberOfProducts: cartManager.products.count)
                 }
             }
+            .background(Image("background_splash_screen")
+                .resizable()
+                .scaledToFill(
+                )
+                    .edgesIgnoringSafeArea(.all))
         }
+                
+                     
         .navigationViewStyle(StackNavigationViewStyle())
+      
     }
 }
 
