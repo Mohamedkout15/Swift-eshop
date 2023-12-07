@@ -11,7 +11,7 @@ import SwiftUI
 struct AquaGuard_shopApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(viewModel: ProductViewModel())
         }
     }
 }

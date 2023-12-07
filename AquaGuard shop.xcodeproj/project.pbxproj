@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		17275E1C2B21FAB200CF1C36 /* ProductService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17275E1B2B21FAB200CF1C36 /* ProductService.swift */; };
+		17275E1F2B21FAEE00CF1C36 /* ProductViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17275E1E2B21FAEE00CF1C36 /* ProductViewModel.swift */; };
 		17B9A3172B18C4E3006BEEFB /* AquaGuard_shopApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B9A3162B18C4E3006BEEFB /* AquaGuard_shopApp.swift */; };
 		17B9A31B2B18C4E4006BEEFB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 17B9A31A2B18C4E4006BEEFB /* Assets.xcassets */; };
 		17B9A31F2B18C4E4006BEEFB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 17B9A31E2B18C4E4006BEEFB /* Preview Assets.xcassets */; };
@@ -22,6 +24,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		17275E1B2B21FAB200CF1C36 /* ProductService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductService.swift; sourceTree = "<group>"; };
+		17275E1E2B21FAEE00CF1C36 /* ProductViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductViewModel.swift; sourceTree = "<group>"; };
 		17B9A3132B18C4E3006BEEFB /* AquaGuard shop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AquaGuard shop.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		17B9A3162B18C4E3006BEEFB /* AquaGuard_shopApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AquaGuard_shopApp.swift; sourceTree = "<group>"; };
 		17B9A31A2B18C4E4006BEEFB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -49,6 +53,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		17275E1A2B21FAA000CF1C36 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				17275E1B2B21FAB200CF1C36 /* ProductService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		17275E1D2B21FADA00CF1C36 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				17275E1E2B21FAEE00CF1C36 /* ProductViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		17B9A30A2B18C4E3006BEEFB = {
 			isa = PBXGroup;
 			children = (
@@ -68,6 +88,8 @@
 		17B9A3152B18C4E3006BEEFB /* AquaGuard shop */ = {
 			isa = PBXGroup;
 			children = (
+				17275E1D2B21FADA00CF1C36 /* ViewModels */,
+				17275E1A2B21FAA000CF1C36 /* Services */,
 				17B9A3282B18C55C006BEEFB /* Models */,
 				17B9A3272B18C550006BEEFB /* Components */,
 				17B9A3262B18C545006BEEFB /* Views */,
@@ -189,12 +211,14 @@
 			files = (
 				17B9A3172B18C4E3006BEEFB /* AquaGuard_shopApp.swift in Sources */,
 				17B9A33D2B18C6C0006BEEFB /* PaymentHandler.swift in Sources */,
+				17275E1F2B21FAEE00CF1C36 /* ProductViewModel.swift in Sources */,
 				17B9A33B2B18C69C006BEEFB /* CartManager.swift in Sources */,
 				17B9A3332B18C611006BEEFB /* ProductRow.swift in Sources */,
 				17B9A3352B18C62A006BEEFB /* PaymentButton.swift in Sources */,
 				17B9A32D2B18C5BA006BEEFB /* Product.swift in Sources */,
 				17B9A3392B18C674006BEEFB /* ContentView.swift in Sources */,
 				17B9A32F2B18C5DE006BEEFB /* ProductCard.swift in Sources */,
+				17275E1C2B21FAB200CF1C36 /* ProductService.swift in Sources */,
 				17B9A3372B18C650006BEEFB /* CartView.swift in Sources */,
 				17B9A3312B18C5F9006BEEFB /* CartButton.swift in Sources */,
 			);

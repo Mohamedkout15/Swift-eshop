@@ -10,7 +10,8 @@ import SwiftUI
 
 struct CartView: View {
     @EnvironmentObject var cartManager: CartManager
-    
+    let viewModel = ProductViewModel()
+
     var body: some View {
         ScrollView {
             if cartManager.paymentSuccess {
@@ -19,7 +20,7 @@ struct CartView: View {
             } else {
                 if cartManager.products.count > 0 {
                     ForEach(cartManager.products, id: \.id) { product in
-                        ProductRow(product: product)
+                        ProductRow(viewModel: viewModel, product: product)
                     }
                     
                     HStack {
