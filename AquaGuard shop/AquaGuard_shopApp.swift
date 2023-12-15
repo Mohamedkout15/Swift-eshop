@@ -12,6 +12,7 @@ struct AquaGuard_shopApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView(viewModel: ProductViewModel())
+                .environmentObject(CartManager())
         }
     }
 }

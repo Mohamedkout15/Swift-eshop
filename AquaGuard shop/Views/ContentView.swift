@@ -1,53 +1,103 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var cartManager = CartManager()
-    var columns = [GridItem(.adaptive(minimum: 160), spacing: 20)]
+    @EnvironmentObject var cartManager: CartManager
     @ObservedObject var viewModel: ProductViewModel
-    
+    @State private var searchText = ""
+    @State private var selectedCategory = ""
+    @State private var selectedPriceRange: Int = 5000
+    var columns = [GridItem(.adaptive(minimum: 160), spacing: 20)]
+    @State private var isShowingProductDetail = false
+    @State private var selectedProduct: Product?
+
     init(viewModel: ProductViewModel) {
         self.viewModel = viewModel
     }
-    
+
     var body: some View {
         NavigationView {
-            ScrollView {
-                LazyVGrid(columns: columns, spacing: 20) {
-                    ForEach(viewModel.productList ?? [], id: \.id) { product in
-                        ProductCard(viewModel: viewModel, product: product)
-                            .environmentObject(cartManager)
+            VStack {
+                // Search Bar
+                SearchBar(text: $searchText)
+                    .padding(.horizontal)
+
+                // Category Selector
+                Picker(selection: $selectedCategory, label: Text("Category")) {
+                    Text("All Categories")
+                        .tag("")
+                    ForEach(["Accessoires","Loisir","Materiel de Plongée","Hygiéne"], id: \.self) { category in
+                        Text(category)
+                            .tag(category)
                     }
                 }
-                .padding()
-            }
-            .navigationTitle(Text("AquaGuard Shop"))
-            .toolbar {
-                NavigationLink {
-                    CartView()
-                        .environmentObject(cartManager)
-                } label: {
-                    CartButton(numberOfProducts: cartManager.products.count)
+                .pickerStyle(MenuPickerStyle())
+                .padding(.horizontal)
+
+                // Price Range Slider
+                Slider(value: Binding(
+                                    get: { Double(selectedPriceRange) }, // Convert Int to Double
+                                    set: { selectedPriceRange = Int($0) } // Convert Double to Int
+                                ), in: 0...5000, step: 100)
+                                .padding(.horizontal)
+
+                                Text("Selected Price Range: \(selectedPriceRange)") // Remove Int conversion
+                                    .padding(.horizontal)
+                // Product Grid
+                ScrollView {
+                    LazyVGrid(columns: columns, spacing: 20) {
+                        ForEach(viewModel.productList?.filter { product in
+                            let nameMatches = product.name.lowercased().contains(searchText.lowercased()) || searchText.isEmpty
+                            let categoryMatches = product.category == selectedCategory || selectedCategory.isEmpty
+                            let priceInRange = product.price <= selectedPriceRange
+                            return nameMatches && categoryMatches && priceInRange
+                        } ?? [], id: \.id) { product in
+                            ProductCard(viewModel: viewModel, product: product)
+                                .environmentObject(cartManager)
+                                .onTapGesture {
+                                    selectedProduct = product
+                                    isShowingProductDetail = true
+                                }
+                        }
+                    }
+                    .padding()
                 }
             }
-            .background(Image("background_splash_screen")
-                .resizable()
-                .scaledToFill()
-                    .edgesIgnoringSafeArea(.all))
-        }.onAppear(){
-            Task{
+            .background(
+                Image("background_splash_screen")
+                    .resizable()
+                    .scaledToFill()
+                    .edgesIgnoringSafeArea(.all)
+            )
+            .sheet(isPresented: $isShowingProductDetail) {
+                if let selectedProduct = selectedProduct {
+                    ProductDetailView(product: selectedProduct)
+                        .environmentObject(cartManager)
+                }
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitle("AquaGuard Shop")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink(destination: CartView().environmentObject(cartManager)) {
+                        CartButton(numberOfProducts: cartManager.products.count)
+                    }
+                }
+            }
+        }
+        .onAppear() {
+            Task {
                 viewModel.fetchProducts()
-                print("sdfdsfsfsdfdsfsfsdfsdfsdfsdf")
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
-/*struct ContentView_Previews: PreviewProvider {
+struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let viewModel = ProductViewModel()
-        viewModel.productList = []
-        
+        let cartManager = CartManager()
         ContentView(viewModel: viewModel)
+            .environmentObject(cartManager)
     }
-}*/
+}

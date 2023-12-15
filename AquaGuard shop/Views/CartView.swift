@@ -1,13 +1,4 @@
-//
-//  CartView.swift
-//  AquaGuard shop
-//
-//  Created by Mohamed Kout on 30/11/2023.
-//
-
-
 import SwiftUI
-
 struct CartView: View {
     @EnvironmentObject var cartManager: CartManager
     let viewModel = ProductViewModel()
@@ -15,8 +6,14 @@ struct CartView: View {
     var body: some View {
         ScrollView {
             if cartManager.paymentSuccess {
-                Text("Thanks for your purchase!")
+                Text("Thank you for your purchase. Please wait for our email for the validation of your order. You can download your payment invoice.")
                     .padding()
+
+                if let fileURL = cartManager.fileURL {
+                    Button("Download Invoice") {
+                        downloadPDF(at: fileURL)
+                    }
+                }
             } else {
                 if cartManager.products.count > 0 {
                     ForEach(cartManager.products, id: \.id) { product in
@@ -26,44 +23,51 @@ struct CartView: View {
                     HStack {
                         Text("Your cart total is")
                         Spacer()
-                        Text("$\(cartManager.total).00")
+                        Text("\(cartManager.total).00 PT")
                             .bold()
                     }
                     .padding()
                     
                     PaymentButton(action: cartManager.pay)
                         .padding()
-                    
-                    
                 } else {
                     Text("Your cart is empty.")
                 }
             }
         }
-
         .navigationTitle(Text("My Cart"))
         .padding(.top)
         .onDisappear {
             if cartManager.paymentSuccess {
                 cartManager.paymentSuccess = false
-                
             }
-     
         }
-        .background(Image("background_splash_screen")
-                
-                .scaledToFill(
-                )
-                    .edgesIgnoringSafeArea(.all))
+        .background(
+            Image("background_splash_screen")
+                .resizable()
+                .scaledToFill()
+                .edgesIgnoringSafeArea(.all)
+        )
+        
     }
-}
 
-struct CartView_Previews: PreviewProvider {
-    static var previews: some View {
-        ZStack(){
-            CartView()
-                .environmentObject(CartManager())
+    private func downloadPDF(at url: URL) {
+        let fileManager = FileManager.default
+        let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
+        let uniqueFilename = UUID().uuidString + "_" + url.lastPathComponent
+        let destinationURL = documentsDirectory?.appendingPathComponent(uniqueFilename)
+        
+        do {
+            try fileManager.copyItem(at: url, to: destinationURL!)
+            let activityViewController = UIActivityViewController(activityItems: [destinationURL!], applicationActivities: nil)
+            if let window = UIApplication.shared.windows.first {
+                activityViewController.popoverPresentationController?.sourceView = window
+                activityViewController.popoverPresentationController?.sourceRect = CGRect(x: window.bounds.midX, y: window.bounds.midY, width: 0, height: 0)
+            }
+            // Present the activity view controller
+            UIApplication.shared.keyWindow?.rootViewController?.present(activityViewController, animated: true, completion: nil)
+        } catch {
+            print("Failed to download PDF file: \(error)")
         }
-
     }
 }

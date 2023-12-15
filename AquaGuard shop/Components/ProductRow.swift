@@ -15,17 +15,23 @@ struct ProductRow: View {
     var body: some View {
         HStack(spacing: 20) {
             if let product = product {
-               Image(product.image)
-                  .resizable()
-                   .aspectRatio(contentMode: .fit)
-                   .frame(width: 50)
-                  .cornerRadius(10)
+                AsyncImage(url: URL(string: "http://172.18.26.15:9090/images/produit/\(product.image)")) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 50, height: 50)
+                        
+                } placeholder: {
+                    Rectangle()
+                        .foregroundColor(.gray)
+                        
+                }
 
                 VStack(alignment: .leading, spacing: 10) {
                     Text(product.name)
                         .bold()
 
-                    Text("$\(product.price)")
+                    Text("\(product.price)PT")
                 }
 
                 Spacer()
